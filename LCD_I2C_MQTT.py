@@ -58,40 +58,40 @@ if __name__ == '__main__':
     mylcd = I2C_LCD_driver.lcd()
     State_Machine = 0
     while True:
-    if State_Machine == 0:  # Try to read config.ini file
-        try:
-            Config = ConfigParser.ConfigParser()
-            Config.read("config.ini")
-            MQTT_IP = Config.get("MQTT Broker","IP")
-            MQTT_Port = int(Config.get("MQTT Broker","Port"))
-            Topic_LCD_line1 = Config.get("MQTT Broker","Topic_LCD_line1")
-            Topic_LCD_line2 = Config.get("MQTT Broker","Topic_LCD_line2")
-            Topic_LCD_line3 = Config.get("MQTT Broker","Topic_LCD_line3")
-            Topic_LCD_line4 = Config.get("MQTT Broker","Topic_LCD_line4")
-        except Exception, e:
-            print "******************* Error reading config.ini file (will use defaults): " + repr(e)
-            State_Machine = 1
-    elif State_Machine == 1:   #Connect to MQTT broker
-        attempts = 3  # number log attempts
-        try:
-            print "Attempting connection to MQTT Broker: " + MQTT_IP + ":" + str(MQTT_Port)
-            client = mqtt.Client()
-            client.on_connect = on_connect
-            client.on_message = on_message
-            client.connect(MQTT_IP, MQTT_Port, MQTT_KeepAlive)
-            client.loop_start()
-            client.subscribe("LCD1/line1")
-            client.subscribe("LCD1/line2")
-            client.subscribe("LCD1/line3")
-            client.subscribe("LCD1/line4")
-            State_Machine = 2
-        except Exception, e:
-            print "MQTT connection error (" + str(attempts) + ": " + repr(e)
-            time.sleep(Poll_Speed * 5)
-            attempts = attempts - 1
-    elif State_Machine == 2:   # Main Reporting Loop
-        print "."
-        sleep(MQTT_Poll_Speed)
+        if State_Machine == 0:  # Try to read config.ini file
+            try:
+                Config = ConfigParser.ConfigParser()
+                Config.read("config.ini")
+                MQTT_IP = Config.get("MQTT Broker","IP")
+                MQTT_Port = int(Config.get("MQTT Broker","Port"))
+                Topic_LCD_line1 = Config.get("MQTT Broker","Topic_LCD_line1")
+                Topic_LCD_line2 = Config.get("MQTT Broker","Topic_LCD_line2")
+                Topic_LCD_line3 = Config.get("MQTT Broker","Topic_LCD_line3")
+                Topic_LCD_line4 = Config.get("MQTT Broker","Topic_LCD_line4")
+            except Exception, e:
+                print "******************* Error reading config.ini file (will use defaults): " + repr(e)
+                State_Machine = 1
+        elif State_Machine == 1:   #Connect to MQTT broker
+            attempts = 3  # number log attempts
+            try:
+                print "Attempting connection to MQTT Broker: " + MQTT_IP + ":" + str(MQTT_Port)
+                client = mqtt.Client()
+                client.on_connect = on_connect
+                client.on_message = on_message
+                client.connect(MQTT_IP, MQTT_Port, MQTT_KeepAlive)
+                client.loop_start()
+                client.subscribe("LCD1/line1")
+                client.subscribe("LCD1/line2")
+                client.subscribe("LCD1/line3")
+                client.subscribe("LCD1/line4")
+                State_Machine = 2
+            except Exception, e:
+                print "MQTT connection error (" + str(attempts) + ": " + repr(e)
+                time.sleep(Poll_Speed * 5)
+                attempts = attempts - 1
+        elif State_Machine == 2:   # Main Reporting Loop
+            print "."
+            sleep(MQTT_Poll_Speed)
 
 
 
