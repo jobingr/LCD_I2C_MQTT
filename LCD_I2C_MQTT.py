@@ -7,10 +7,10 @@ from time import *
 # Variables if ConfigParser fails
 MQTT_IP = "10.0.1.195"
 MQTT_port= 1883
-Topic_LCD_line1 = LCD1/line1
-Topic_LCD_line2 = LCD1/line2
-Topic_LCD_line3 = LCD1/line3
-Topic_LCD_line4 = LCD1/line4
+Topic_LCD_line1 = "LCD1/line1"
+Topic_LCD_line2 = "LCD1/line2"
+Topic_LCD_line3 = "LCD1/line3"
+Topic_LCD_line4 = "LCD1/line4"
 MQTT_KeepAlive = 300                         #Seconds
 MQTT_Poll_Speed = 0.1
 
