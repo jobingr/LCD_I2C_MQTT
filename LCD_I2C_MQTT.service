@@ -1,0 +1,18 @@
+[Unit]
+Description=Listens on /LCD1/Line1-4 to dislay via I2C on LCD
+Documentation=https://github.com/jobingr/LCD_I2C_MQTT
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+EnvironmentFile=/opt/LCD_I2C_MQTT/config.ini
+User=openhab
+Group=openhab
+WorkingDirectory=/opt/LCD_I2C_MQTT/
+PermissionsStartOnly=true
+ExecStart=/usr/bin/python /opt/LCD_I2C/LCD_I2C_MQTT.py
+# Shutdown delay in seconds, before process is tried to be killed with KILL (if configured)
+TimeoutStopSec=200
+
+[Install]
+WantedBy=multi-user.target
