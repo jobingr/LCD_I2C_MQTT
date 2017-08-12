@@ -3,6 +3,7 @@ import ConfigParser
 import lib.client as mqtt
 import I2C_LCD_driver
 from time import *
+import datetime
 
 # Variables if ConfigParser fails
 MQTT_IP = "10.0.1.195"
@@ -11,6 +12,7 @@ Topic_LCD_line1 = "LCD1/line1"
 Topic_LCD_line2 = "LCD1/line2"
 Topic_LCD_line3 = "LCD1/line3"
 Topic_LCD_line4 = "LCD1/line4"
+Topic_LCD_timestamp = "LCD1/timestamp"
 MQTT_KeepAlive = 300                         #Seconds
 MQTT_Poll_Speed = 0.1
 
@@ -29,21 +31,13 @@ def on_message(client, userdata, msg):
     line = int(msg.topic.split("/")[1][4])
     msg_20chars = (str(msg.payload)+"                       ")[0:19]
     print line, msg_20chars
-#    mylcd = I2C_LCD_driver.lcd() 
     mylcd.lcd_display_string(msg_20chars, line)
-
-# mylcd = I2C_LCD_driver.lcd()
-# client = mqtt.Client()
-# client.on_connect = on_connect
-# client.on_message = on_message
-# client.connect("10.0.1.195", 1883, 600)
-# client.loop_start()
-
-# client.subscribe("LCD1/line1")
-# client.subscribe("LCD1/line2")
-# client.subscribe("LCD1/line3")
-# client.subscribe("LCD1/line4")
-
+    date_str = datetime.datetime.now().strftime("%I:%M%p %d/%m/%Y")
+    # Publish timestamp so that receiver can confirm last update time
+    client.publish(topic=Topic_LCD_timestamp,
+                   payload=date_str,
+                   qos=0,
+                   retain=True)
 
 def get_ip_address(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -68,6 +62,8 @@ if __name__ == '__main__':
                 Topic_LCD_line2 = Config.get("MQTT Broker","Topic_LCD_line2")
                 Topic_LCD_line3 = Config.get("MQTT Broker","Topic_LCD_line3")
                 Topic_LCD_line4 = Config.get("MQTT Broker","Topic_LCD_line4")
+                Topic_LCD_line4 = Config.get("MQTT Broker","LCD1/timestamp")
+                Topic_LCD_timestamp = Config.get("MQTT Broker","LCD1/timestamp")
             except Exception, e:
                 print "******************* Error reading config.ini file (will use defaults): " + repr(e)
                 State_Machine = 1
