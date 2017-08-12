@@ -58,7 +58,7 @@ if __name__ == '__main__':
     mylcd = I2C_LCD_driver.lcd()
     State_Machine = 0
     while True:
-    if State_Machine =0:  # Try to read config.ini file
+    if State_Machine == 0:  # Try to read config.ini file
         try:
             Config = ConfigParser.ConfigParser()
             Config.read("config.ini")
