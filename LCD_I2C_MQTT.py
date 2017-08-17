@@ -15,6 +15,7 @@ Topic_LCD_line4 = "LCD1/line4"
 Topic_LCD_timestamp = "LCD1/timestamp"
 MQTT_KeepAlive = 300                         #Seconds
 MQTT_Poll_Speed = 0.1
+MQTT_Connect_Poll_Speed = 15     # seconds
 
 
 def on_connect(client, userdata, flags, rc):
@@ -67,8 +68,10 @@ if __name__ == '__main__':
             except Exception, e:
                 print "******************* Error reading config.ini file (will use defaults): " + repr(e)
                 State_Machine = 1
+            # print "waiting: " + str(MQTT_Connect_Poll_Speed)
+            # sleep(MQTT_Connect_Poll_Speed)
         elif State_Machine == 1:   #Connect to MQTT broker
-            attempts = 3  # number log attempts
+            attempts = 10  # number log attempts
             try:
                 print "Attempting connection to MQTT Broker: " + MQTT_IP + ":" + str(MQTT_Port)
                 client = mqtt.Client()
@@ -83,7 +86,7 @@ if __name__ == '__main__':
                 State_Machine = 2
             except Exception, e:
                 print "MQTT connection error (" + str(attempts) + ": " + repr(e)
-                time.sleep(Poll_Speed * 5)
+                time.sleep(MQTT_Connect_Poll_Speed)
                 attempts = attempts - 1
         elif State_Machine == 2:   # Main Reporting Loop
             print "."
