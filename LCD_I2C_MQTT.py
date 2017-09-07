@@ -71,7 +71,7 @@ if __name__ == '__main__':
             # print "waiting: " + str(MQTT_Connect_Poll_Speed)
             # sleep(MQTT_Connect_Poll_Speed)
         elif State_Machine == 1:   #Connect to MQTT broker
-            attempts = 10  # number log attempts
+            attempts = 100  # number log attempts
             try:
                 print "Attempting connection to MQTT Broker: " + MQTT_IP + ":" + str(MQTT_Port)
                 client = mqtt.Client()
@@ -86,7 +86,7 @@ if __name__ == '__main__':
                 State_Machine = 2
             except Exception, e:
                 print "MQTT connection error (" + str(attempts) + ": " + repr(e)
-                time.sleep(MQTT_Connect_Poll_Speed)
+                sleep(MQTT_Connect_Poll_Speed)
                 attempts = attempts - 1
         elif State_Machine == 2:   # Main Reporting Loop
             print "."
