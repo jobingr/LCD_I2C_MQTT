@@ -56,7 +56,10 @@ def get_ip_address(ifname):
 
 
 if __name__ == '__main__':
-    mylcd = I2C_LCD_driver.lcd()
+    try:
+        mylcd = I2C_LCD_driver.lcd()
+    except:
+        print("Could not find LCD, LCD Connected?")
     State_Machine = 0
     while True:
         if State_Machine == 0:  # Try to read config.ini file
