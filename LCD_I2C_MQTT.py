@@ -24,10 +24,10 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-    global Control_Partition
-    global Control_NewState
-    global Control_Action
-    global Polling_Enabled
+    # global Control_Partition
+    # global Control_NewState
+    # global Control_Action
+    # global Polling_Enabled
 
     print("MQTT Message: " + msg.topic+" "+str(msg.payload))
     line = int(msg.topic.split("/")[1][4])
