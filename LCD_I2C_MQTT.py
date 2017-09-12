@@ -91,6 +91,7 @@ if __name__ == '__main__':
         elif State_Machine == 2:   # Main Reporting Loop
             print "."
             sleep(MQTT_Poll_Speed)
+            # 2017-=09-15
 
 
 
