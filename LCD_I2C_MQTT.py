@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #!/usr/bin/python
 import ConfigParser
 import lib.client as mqtt
@@ -203,6 +202,3 @@ if __name__ == '__main__':
             sleep(MQTT_Poll_Speed)
             # 2017-=09-15
 
-
-
->>>>>>> ac4787ae97479961d8feecb512eb959bb9537c21
