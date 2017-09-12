@@ -32,14 +32,20 @@ def on_message(client, userdata, msg):
     print("MQTT Message: " + msg.topic+" "+str(msg.payload))
     line = int(msg.topic.split("/")[1][4])
     msg_20chars = (str(msg.payload)+"                       ")[0:19]
-    print line, msg_20chars
-    mylcd.lcd_display_string(msg_20chars, line)
     date_str = datetime.datetime.now().strftime("%I:%M%p %d/%m/%Y")
+    print line, msg_20chars
+    try:
+        mylcd.lcd_display_string(msg_20chars, line)
+    except:
+        print("Could not display line, LCD Connected?")
     # Publish timestamp so that receiver can confirm last update time
-    client.publish(topic=Topic_LCD_timestamp,
-                   payload=date_str,
-                   qos=0,
-                   retain=True)
+    try:
+        client.publish(topic=Topic_LCD_timestamp,
+                       payload=date_str,
+                       qos=0,
+                       retain=True)
+    except:
+        print("Could not update time, MQTT Connected?")
 
 def get_ip_address(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
