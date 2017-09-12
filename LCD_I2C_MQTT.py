@@ -23,22 +23,28 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-    global Control_Partition
-    global Control_NewState
-    global Control_Action
-    global Polling_Enabled
+    # global Control_Partition
+    # global Control_NewState
+    # global Control_Action
+    # global Polling_Enabled
 
     print("MQTT Message: " + msg.topic+" "+str(msg.payload))
     line = int(msg.topic.split("/")[1][4])
     msg_20chars = (str(msg.payload)+"                       ")[0:19]
     print line, msg_20chars
-    mylcd.lcd_display_string(msg_20chars, line)
     date_str = datetime.datetime.now().strftime("%I:%M%p %d/%m/%Y")
+    try:
+        mylcd.lcd_display_string(msg_20chars, line)
+    except:
+        print("LCD not connected")
     # Publish timestamp so that receiver can confirm last update time
-    client.publish(topic=Topic_LCD_timestamp,
-                   payload=date_str,
-                   qos=0,
-                   retain=True)
+    try:
+        client.publish(topic=Topic_LCD_timestamp,
+                       payload=date_str,
+                       qos=0,
+                       retain=True)
+    except:
+        print("Could not publish time to MQTT :" + date_str)
 
 def get_ip_address(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
